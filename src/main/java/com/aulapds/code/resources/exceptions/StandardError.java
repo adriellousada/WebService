@@ -48,14 +48,15 @@ public class StandardError implements Serializable{
 	public void setError(String error) {
 		this.error = error;
 	}
-
+	
+	public void setMessage(String message) {
+		this.message = message;
+	}
+	
 	public String getMessage() {
 		return message;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
 
 	public String getPath() {
 		return path;
