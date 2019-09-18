@@ -4,9 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
 import javax.persistence.EntityNotFoundException;
-
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,6 +13,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.aulapds.code.dto.UserDTO;
+import com.aulapds.code.dto.UserInsertDTO;
 import com.aulapds.code.entities.User;
 import com.aulapds.code.repositories.UserRepository;
 import com.aulapds.code.services.exceptions.DatabaseException;
@@ -37,8 +37,10 @@ public class UserService {
 		return new UserDTO(entity);
 	}
 
-	public User insert(User obj) {
-		return repository.save(obj);
+	public UserDTO insert(UserInsertDTO dto) {
+		User entity =  dto.toEntity();
+		entity = repository.save(entity);
+		return new UserDTO(entity);
 	}
 
 	public void delete(Long id) {
