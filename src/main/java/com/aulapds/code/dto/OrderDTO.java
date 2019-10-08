@@ -9,22 +9,23 @@ import com.aulapds.code.entities.enums.OrderStatus;
 
 public class OrderDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
-
-
+	
+	
 	private Long id;
+	
 	private Instant moment;
 	private OrderStatus orderStatus;
 	private Long clientId;
 	private String clientName;
 	private String clientEmail;
-
+	
 	public OrderDTO() {
-
+		
 	}
 
 	public OrderDTO(Long id, Instant moment, OrderStatus orderStatus, Long clientId, String clientName,
 			String clientEmail) {
-
+		
 		this.id = id;
 		this.moment = moment;
 		this.orderStatus = orderStatus;
@@ -32,7 +33,7 @@ public class OrderDTO implements Serializable{
 		this.clientName = clientName;
 		this.clientEmail = clientEmail;
 	}
-
+	
 
 	public OrderDTO(Order entity) {
 		if(entity.getClient() == null) {
@@ -93,7 +94,7 @@ public class OrderDTO implements Serializable{
 	public void setClientEmail(String clientEmail) {
 		this.clientEmail = clientEmail;
 	}
-
+	
 	public Order toEntity() {
 		User client = new User(clientId, clientName, clientEmail, null, null);
 		return new Order(id, moment, orderStatus, client);
