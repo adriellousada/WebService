@@ -2,6 +2,11 @@ package com.aulapds.code.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
 import com.aulapds.code.entities.User;
 
 public class UserInsertDTO implements Serializable {
@@ -9,10 +14,22 @@ public class UserInsertDTO implements Serializable {
 
 
 	private Long id;
+	
+	@NotEmpty(message = "Can't be empty")
+	@Length(min = 5, max = 80, message = "Length must be betwen 5 and 80")
 	private String name;
+	
+	@NotEmpty(message = "Can't be empty")
+	@Email(message = "Invalid email")
 	private String email;
+	
+	@NotEmpty(message = "Can't be empty")
+	@Length(min = 8, max = 20, message = "Length must be betwen 5 and 80")
 	private String phone;
-
+	
+	@NotEmpty(message = "Can't be empty")
+	private String password;
+	
 	public UserInsertDTO() {
 
 	}
