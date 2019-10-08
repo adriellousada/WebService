@@ -4,11 +4,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.aulapds.code.dto.CategoryDTO;
+import com.aulapds.code.dto.ProductCategoriesDTO;
 import com.aulapds.code.dto.ProductDTO;
+import com.aulapds.code.entities.Category;
 import com.aulapds.code.entities.Product;
+import com.aulapds.code.repositories.CategoryRepository;
 import com.aulapds.code.repositories.ProductRepository;
 import com.aulapds.code.services.exceptions.ResourceNotFoundException;
 
@@ -16,17 +22,36 @@ import com.aulapds.code.services.exceptions.ResourceNotFoundException;
 public class ProductService {
 
 	@Autowired
-	private ProductRepository repositoty;
+	private ProductRepository repository;
+	
+	@Autowired
+	private CategoryRepository  CategoryRepository;
 	
 	public List<ProductDTO> findAll(){
 		
-		List<Product> list = repositoty.findAll();
+		List<Product> list = repository.findAll();
 		return list.stream().map(e -> new ProductDTO(e)).collect(Collectors.toList());
 	}
 	
 	public ProductDTO findById(Long id) {
-		Optional<Product> obj = repositoty.findById(id);
+		Optional<Product> obj = repository.findById(id);
 		Product entity= obj.orElseThrow(()-> new ResourceNotFoundException(id));
 		return new ProductDTO(entity);
+	}
+	
+	@Transactional 
+	public ProductDTO insert(ProductCategoriesDTO dto) {
+		Product entity =  dto.toEntity();
+		setProductCategories(entity, dto.getCategories());
+		entity = repository.save(entity);
+		return new ProductDTO(entity);
+	}
+
+	private void setProductCategories(Product entity, List<CategoryDTO> categories) {
+		entity.getCategories().clear();
+		for (CategoryDTO dto : categories){
+			Category category = CategoryRepository.getOne(dto.getId());
+			entity.getCategories().add(category);
+		}
 	}
 }
