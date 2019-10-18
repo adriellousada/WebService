@@ -13,12 +13,14 @@ import com.aulapds.code.entities.Order;
 import com.aulapds.code.entities.OrderItem;
 import com.aulapds.code.entities.Payment;
 import com.aulapds.code.entities.Product;
+import com.aulapds.code.entities.Role;
 import com.aulapds.code.entities.User;
 import com.aulapds.code.entities.enums.OrderStatus;
 import com.aulapds.code.repositories.CategoryRepository;
 import com.aulapds.code.repositories.OrderItemRepository;
 import com.aulapds.code.repositories.OrderRepository;
 import com.aulapds.code.repositories.ProductRepository;
+import com.aulapds.code.repositories.RoleRepository;
 import com.aulapds.code.repositories.UserRepository;
 
 @Configuration
@@ -40,6 +42,9 @@ public class TestConfig implements CommandLineRunner {
 	@Autowired
 	private OrderItemRepository orderItemRepository;
 	
+	@Autowired
+	private RoleRepository roleRepository;
+	
 	@Override
 	public void run(String... args) throws Exception {
 		
@@ -51,6 +56,17 @@ public class TestConfig implements CommandLineRunner {
 		
 		User u1 = new User(1L, "Maria Brown", "maria@gmail.com", "988888888", "123456");
 		User u2 = new User(2L, "Alex Green", "alex@gmail.com", "977777777", "123456");
+		
+		Role r1 = new Role(null, "ROLE_CLIENT");
+		Role r2 = new Role(null, "ROLE_ADMIN");
+
+		roleRepository.saveAll(Arrays.asList(r1,r2));
+
+		u1.getRoles().add(r1);
+		u2.getRoles().add(r1);
+		u2.getRoles().add(r2);
+
+		userRepository.saveAll(Arrays.asList(u1,u2));
 		
 		Order o1 = new Order(null, Instant.parse("2019-06-20T19:53:07Z"), OrderStatus.PAID, u1);
 		Order o2 = new Order(null, Instant.parse("2019-07-21T03:42:10Z"), OrderStatus.WAIING_PAYMENT, u2);
