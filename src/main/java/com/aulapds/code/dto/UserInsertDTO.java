@@ -8,7 +8,9 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 
 import com.aulapds.code.entities.User;
+import com.aulapds.code.services.validations.UserInsertValid;
 
+@UserInsertValid
 public class UserInsertDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -34,12 +36,21 @@ public class UserInsertDTO implements Serializable {
 
 	}
 
-	public UserInsertDTO(Long id, String name, String email, String phone) {
+	public UserInsertDTO(Long id, String name, String email, String phone, String password) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.phone = phone;
+		this.password = password;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public UserInsertDTO(User entity) {
