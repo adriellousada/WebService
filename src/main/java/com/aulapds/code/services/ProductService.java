@@ -1,8 +1,8 @@
 package com.aulapds.code.services;
 
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
@@ -10,6 +10,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.aulapds.code.dto.CategoryDTO;
@@ -31,10 +33,10 @@ public class ProductService {
 	@Autowired
 	private CategoryRepository  CategoryRepository;
 	
-	public List<ProductDTO> findAll(){
+	public Page<ProductDTO> findAllPaged(Pageable pageable){
 		
-		List<Product> list = repository.findAll();
-		return list.stream().map(e -> new ProductDTO(e)).collect(Collectors.toList());
+		Page<Product> list = repository.findAll(pageable);
+		return list.map(e -> new ProductDTO(e));
 	}
 	
 	public ProductDTO findById(Long id) {
